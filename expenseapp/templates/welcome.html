@@ -3,52 +3,37 @@
 {% block title %} Expense Tracker {% endblock %}
 
 {% block content %}
-<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-    <a class="navbar-brand" href="#">Navbar</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
-        aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+<div  class="container-fluid">
+<br><br>
+<div style="margin:auto; text-align: center;" class="row">
 
-    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'account_login' %}">LogIn</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false">Dropdown</a>
-                <div class="dropdown-menu" aria-labelledby="dropdown01">
-                    <a class="dropdown-item" href="#">Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
-                    <a class="dropdown-item" href="#">Something else here</a>
-                </div>
-            </li>
-        </ul>
-       
-    </div>
-</nav>
+<div class="col-md-6 col-xs-12">
+<h1 style="font-size: 70px;" class="text-light">The Expense Tracking App For The Digital Age</h1>
+<h2 style="font-size: 40px; color: lightgrey;" >Track your daily expenses with ease. Track your expenses manually or automatically 
+    with our Receipt OCR Technology.
+</h2>
+</div>
 
-<main role="main">
+<div style="background: url('/static/expense_tracker.jpg') no-repeat; width: 500px;
+height: 550px; color:white;" class="col-md-6 col-xs-12">
+<br><br><br><br><br>
+   <h2>Automate Your Expense Tracking With Our Cutting Edge Receipt OCR Automation Technology</h2>
+<br>
+   <a href="{% url 'account_signup' %}" class="btn btn-primary btn-lg">Sign Up to Get Started!</a>
+    
+</div>
 
-    <!-- Main jumbotron for a primary marketing message or call to action -->
-    <di
-    </div>
 
-    <div class="container">
-      r>
 
-    </div> <!-- /container -->
+</div>
 
-</main>
 
-<footer class="container">
-    <p>&copy; Company 2017-2020</p>
-</footer>
+
+
+
+</div>
+
+
+
+
 {% endblock %}
