@@ -40,9 +40,10 @@
                 <option value="refund">Refund</option>
             </select>
            </div><br>
+           <div>
+            <a href="/media/{{ receipt_upload_path }}">View Receipt</a>
+           </div>
            <div class="form-group">
-            <label for="receipt_image_path">Uploaded Receipt Image: {{ receipt_upload_path}}</label>
-            
             <input type="hidden" class="form-control" name="receipt_image_path" value="{{ receipt_upload_path }}" >
            </div><br>
            <div class="d-grid gap-2">
