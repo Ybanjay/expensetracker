@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %} Expense Tracker {% endblock %}
+ 
+
+{% block content %}
+<div class="table-responsive">
+    <div align="right"><a class="btn btn-primary" href="{% url 'manual_expense_form' %}">Add New Expense</a></div>
+    <table  class="table table-striped">
+    
+    <thead> 
+    <th> Name</th>
+    <th> Amount</th>
+    <th> Date</th>
+    <th> Categories</th>
+    <th>Receipt Image</th>
+     <th> Action</th>
+    
+    </thead>
+
+    <tbody>
+        {% if object_list %}
+        {% for object in object_list %}
+       <tr>
+       <td>{{ object.item|upper }}  </td>
+       <td> £ {{ object.amount }}  </td>
+       <td>{{ object.date }} </td>
+       <td> {{ object.category }}</td>
+       <td><a href="/media/{{ object.receipt_image_path }}">View Receipt</a>
+       </td>
+       <td> Edit</td>
+       
+       </tr>
+       {% endfor %}
+       {% else %}
+       <tr>
+        <td></td>
+        <td></td>
+       <td class="text-center"> No Expense Found</td>
+       <td></td>
+       <td></td>
+       </tr>
+       {% endif %}
+       </tbody>
+       
+       </table>
+     </div>
+
+
+
+    
+
+
+
+
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %} Expense Tracker {% endblock %}
+
+{% block content %}
+<div class="row">
+    <h1>Week expense Chart</h1>
+    <div class="col-md-6">
+        <canvas id="myChartBar" width="500" height="400"></canvas>
+        </div>
+        <div class="col-md-6">
+            <canvas id="myChartLine"></canvas> 
+        </div>
+	</div>
+
+     
+       <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
+       <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js"></script>
+       <canvas id="myChart" width="400" height="400"></canvas>
+       <script>
+        //Chart Implementation with Charjs Using this tutorial here:
+        //https://masteringbackend.com/posts/building-a-basic-analytical-app-with-django-and-chartjs
+        $(document).ready(function(){
+        var ctx = document.getElementById('myChartBar').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [{% for expense in expenses %}'{{expense.date}}',{% endfor %}],
+                datasets: [{
+                    label: 'Expenses',
+                    data: [{% for expense in expenses %}'{{expense.amount}}',{% endfor %}],
+                    backgroundColor:  'rgba(255, 99, 132, 0.2)'
+                }]
+            },
+            options: {}
+        });
+        });
+        </script>
+
+<script>
+    //Chart Implementation with Charjs Using this tutorial here:
+    //https://masteringbackend.com/posts/building-a-basic-analytical-app-with-django-and-chartjs
+    $(document).ready(function(){
+    var ctx = document.getElementById('myChartLine').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [{% for expense in expenses %}'{{expense.date}}',{% endfor %}],
+            datasets: [{
+                label: 'Expenses',
+                data: [{% for expense in expenses %}'{{expense.amount}}',{% endfor %}],
+                backgroundColor:  'rgba(255, 99, 132, 0.2)'
+            }]
+        },
+        options: {}
+    });
+    });
+    </script>
+    
+
+
+
+{% endblock %}

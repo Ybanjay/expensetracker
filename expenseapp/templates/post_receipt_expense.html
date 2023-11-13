@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %} Expense Tracker {% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+    
+     <div class="card bg-light">
+      <div style="margin:auto;" class="card-body">
+        <h3 class="card-title text-center text-success">Receipt Expense Entry</h3>
+
+        <form method="post" action="{% url 'manual_expense_form' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            {{ form.errors }}
+            
+            <div class="form-group">
+            <label for="company"> Expense Item</label>
+            <input type="text" class="form-control" name="item" required value="{{ company }}">
+            </div>
+
+            <div class="form-group">
+                <label for="amount"> Amount</label>
+                <input type="number" class="form-control" name="amount" required value="{{ amount }}">
+                </div>
+
+            <div class="form-group">
+            <label for="date"> Date </label>
+            <input type="text" class="form-control" name="date" required value="{{ transaction_date|date:'Y-m-d'}}">
+            </div>
+
+            <div class="form-group">
+            <label for="id_category"> Category </label>
+            <select name="category" class="form-select" required id="id_category">
+                <option value="">Choose Expense Category</option>
+                <option value="groceries">Groceries</option>
+                <option value="rent">Rent</option>
+                <option value="utility">Utility</option>
+                <option value="refund">Refund</option>
+            </select>
+           </div><br>
+           <div class="form-group">
+            <label for="receipt_image_path">Uploaded Receipt Image: {{ receipt_upload_path}}</label>
+            
+            <input type="hidden" class="form-control" name="receipt_image_path" value="{{ receipt_upload_path }}" >
+           </div><br>
+           <div class="d-grid gap-2">
+            <button class="btn btn-primary" type="submit">Add Expense</button>
+            </div>
+        </form>
+
+
+</div>
+</div>
+</div>
+  </div>
+
+  {% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %} Expense Tracker {% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+    
+     <div class="card bg-light">
+      <div style="margin:auto;" class="card-body">
+        <h3 class="card-title text-center text-success">Receipt Expense Entry</h3>
+
+        <form method="post" action="{% url 'manual_expense_form' %}">
+            {% csrf_token %}
+            {{ form.errors }}
+            {{ form.as_p }}
+            <br>
+              <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-primary">Add Expense</button>
+              </div>
+          </form>
+
+        </div>
+    </div>
+    </div>
+      </div> 
+
+
+
+{% endblock %}

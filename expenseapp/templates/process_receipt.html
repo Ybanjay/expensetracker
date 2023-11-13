@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %} Expense Tracker {% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-sm-12 col-md-12">
+    
+     <div class="card bg-light">
+      <div style="margin:auto;" class="card-body">
+        <h3 class="card-title text-center text-success">Receipt Expense Entry</h3>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="file" class="form-control" name="receipt_image" accept="image/*">
+    <br>
+	<div class="d-grid gap-2">
+    <button class="btn btn-info" type="submit">Process Receipt</button>
+    </div>
+</form>
+
+
+
+
+</div>
+</div>
+</div>
+  </div>
+
+
+{% endblock %}
