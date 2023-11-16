@@ -17,6 +17,9 @@ import re
 import os
 from django.conf import settings
 from dateutil.parser import ParserError
+from veryfi import Client
+import json
+from django.contrib import messages
 
 # Create your views here.
 # Display Home Page
@@ -44,6 +47,7 @@ class ManualExpenseView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         form.instance.receipt_image_path = self.request.POST.get('receipt_image_path')
+        messages.success(self.request, 'Expense entry was successfully added!')
         return super().form_valid(form)
 
 
@@ -84,86 +88,34 @@ class ReceiptProcessView(View):
                      if  destination.write(chunk):
                          #save the uploaded receipt relative path
                          receipt_relative_path = os.path.relpath(receipt_upload_path, settings.MEDIA_ROOT)
-
-                # Read and extract data from image
-                # following instructions from the following sources
-                # 1) https://pypi.org/project/pytesseract/
-                # 2) https://nanonets.com/blog/how-to-extract-data-from-invoices-using-python/amp/
-                # 3) https://pyimagesearch.com/2021/10/27/automatically-ocring-receipts-and-scans/
-                # 4) https://www.kaggle.com/code/dmitryyemelyanov/receipt-ocr-part-1-image-segmentation-by-opencv
+            
 
 
-                #Resize Image
-                resized_image = cv2.resize(img, None, fx=2, fy=2, interpolation=cv2.INTER_CUBIC)
+                # https://hub.veryfi.com/api/
+                client_id = 'vrfZ59w40O08opIU5szMZo3fGUPVjLZ59mMPVfx'
+                client_secret = 'aMVpxdo4Wd6DS97Bpcfp1ERkKgFoRdIlvKEOWRrjxIv23T5VaY3k2JWrZOTr3xXY4oAddejMUAojwBgI0Pd8DyzAFv9d4udoINLJwchXc9I4BmKGf7ZO90kEmzOXbk76'
+                username = 'softerboom'
+                api_key = 'c43a0fb9f07383c6db2357056afa2405'
 
-                #convert the image to grayscale 
-                # for better extraction from OCR 
-                gray_scale = cv2.cvtColor(resized_image, cv2.COLOR_BGR2GRAY)
+                veryfi_client = Client(client_id, client_secret, username, api_key)
 
+                categories = ['Grocery', 'Utilities', 'Travel']
+                  
+                # submits document for processing (takes 3-5 seconds to get response)
+                document_json = veryfi_client.process_document(receipt_upload_path, categories=categories)
+                data = document_json
 
-                #threshold_image = cv2.threshold(gray_scale, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
-                gaussian_blur = cv2.GaussianBlur(gray_scale, (5, 5), 0)
-
-                #set Pytesseract
-                pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract"
-                
-                custom_config = r'--oem 3 --psm 6'
-                ocr_text = pytesseract.image_to_string(gaussian_blur, lang="eng", config="custom_config")
-
-                
-
-                #Normalize Date: find the receipt date patter with regular expression
-                # and replace all instance of it with a more recognizable format by spacy
-
-                # Define a regular expression pattern to find dates in the format "29/9/23 00:00:00"
-                date_pattern = re.compile(r'\b(\d{1,2}/\d{1,2}/\d{2} \d{2}:\d{2}:\d{2})\b')
-                # Find all matches in the text
-                matches = date_pattern.findall(ocr_text)
-
-                # Convert each matched date to a standard format
-                for match in matches:
-                    converted_date = datetime.strptime(match, "%d/%m/%y %H:%M:%S").strftime("%d/%m/%Y %H:%M:%S")
-                    ocr_text = ocr_text.replace(match, converted_date)
-
-
-                nlp = spacy.load('en_core_web_sm')
-                doc = nlp(ocr_text)
-
-                organization = None
-                total_amount = None
-                trans_date = None
-
-
-
-                for ent in doc.ents:
-                    if ent.label_ == "ORG" and organization is None:
-                        organization = ent.text.strip()
-
-                    elif ent.label_ == "DATE":
-                        trans_date  = ent.text.strip()
-
-
-                #post process Spacy Total Amount
-                for token in doc:
-                    # Look for keywords that suggest total amount in relation to MONEY entities
-                    if token.text.lower() in ["total", "due", "balance"]:
-                        for child in token.children:
-                            if child.ent_type_ == "MONEY" and total_amount == None:
-                                total_amount = float(child.text.replace("£", ""))  
-                                break
+                vendor_name = data['vendor']['name']
+                category = data['category']
+                date_of_transaction = data['date']
+                total_amount = data['total']
 
                 try:
-                    stripped_date = parse(trans_date, parserinfo=None)
+                    stripped_date = parse(date_of_transaction, parserinfo=None)
                 except (TypeError, ParserError):
                     stripped_date  = datetime.today()
-
-                if total_amount is None:
-                    total_amount = 0.00
                 
-                context = {'extracted_text': ocr_text, "transaction_date": stripped_date, 
-                           "company": organization, "amount": total_amount,
-                             "receipt_upload_path": receipt_relative_path }
+                context = { "transaction_date": stripped_date, "store_name": vendor_name,
+                            "amount": total_amount, "receipt_upload_path": receipt_relative_path }
                 return render(request, 'post_receipt_expense.html', context)
-
-        return render(request, self.template_name)
 

@@ -10,6 +10,9 @@ CATEGORIES_CHOICES = (
     ("rent", "Rent"), 
     ("utility", "Utility"),  
     ("refund", "Refund"), 
+    ("schoollunch", "School Lunch"),
+    ("giftanddonations", "Gifts and Donations" ),
+
 ) 
 class ExpenseForm(forms.ModelForm):
     item = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
