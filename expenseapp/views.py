@@ -16,6 +16,7 @@ from dateutil.parser import ParserError
 from veryfi import Client
 import json
 from django.contrib import messages
+from django.db.models import Sum
 
 # Create your views here.
 # Display Home Page
@@ -29,6 +30,10 @@ class AppView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['expenses'] = Expense.objects.filter(user=self.request.user)
+
+          #get all the expense categories from and a summation of all their amounts of expenses
+        context['category_breakdown'] = Expense.objects.filter(user=self.request.user).values('category')\
+                            .annotate(total=Sum('amount'))
         return context
     
 
@@ -135,8 +140,6 @@ class ExpenseDeleteView(LoginRequiredMixin, DeleteView):
     model = Expense
     template_name = "confirm_delete_expense.html"  
     success_url = reverse_lazy("expense_list")
+    success_message = 'Expense deleted successfully!!!'
        
-       #override the delete to return message
-    def delete(self, request, *args, **kwargs):
-        messages.success(self.request, 'Expense deleted successfully!!!')
-        return super().delete(request, *args, **kwargs)
+      

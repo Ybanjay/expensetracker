@@ -5,12 +5,17 @@
 {% block content %}
 <div style="background: lavender;" class="row">
     <h1>Week expense Chart</h1>
-    <div class="col-md-6">
+    <div class="col-md-12">
         <canvas id="myChartBar" width="500" height="400"></canvas>
         </div>
-        <div class="col-md-6">
-            <canvas id="myChartLine"></canvas> 
-        </div>
+       
+
+        <div align="center" class="col-md-12">
+            <br><br>
+           <h3 class="text-info">Expense Categories</h3>
+                <canvas id="myPieChart" width="600" height="700"></canvas>
+           
+        </div> 
 	</div>
 
      
@@ -29,33 +34,36 @@
                 datasets: [{
                     label: 'Expenses',
                     data: [{% for expense in expenses %}'{{expense.amount}}',{% endfor %}],
-                    backgroundColor:  'rgba(255, 99, 132, 0.2)'
+                    backgroundColor:  'cyan'
                 }]
             },
             options: {}
         });
         });
         </script>
-
 <script>
-    //Chart Implementation with Charjs Using this tutorial here:
-    //https://masteringbackend.com/posts/building-a-basic-analytical-app-with-django-and-chartjs
-    $(document).ready(function(){
-    var ctx = document.getElementById('myChartLine').getContext('2d');
-    var myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: [{% for expense in expenses %}'{{expense.date}}',{% endfor %}],
-            datasets: [{
-                label: 'Expenses',
-                data: [{% for expense in expenses %}'{{expense.amount}}',{% endfor %}],
-                backgroundColor:  'rgba(255, 99, 132, 0.2)'
-            }]
-        },
-        options: {}
-    });
-    });
-    </script>
+    //Pie char implementation with guide from https://www.tutorialspoint.com/chartjs/chartjs_pie_chart.htm 
+    
+         var chrt = document.getElementById("myPieChart").getContext("2d");
+         var chartId = new Chart(chrt, {
+            type: 'pie',
+            data: {
+               labels:  [{% for expense_category in category_breakdown %}'{{expense_category.category}}',{% endfor %}], 
+               datasets: [{
+                  label: "Expense Categories",
+                  data: [{% for expense_category in category_breakdown %}'{{expense_category.total}}',{% endfor %}], 
+                  backgroundColor: ['yellow', 'aqua', 'pink', 'lightgreen', 'gold', 'lightblue'],
+                  hoverOffset: 5
+               }],
+            },
+            options: {
+               responsive: false,
+            },
+         });
+      
+   
+       </script>
+       
     
 
 
