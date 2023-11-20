@@ -2,7 +2,7 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path
-from .views import ManualExpenseView, AppView, ExpenseListView, ReceiptProcessView
+from .views import (ManualExpenseView, AppView, ExpenseListView, ReceiptProcessView, ExpenseUpdateView)
 from . import views
 
 
@@ -16,7 +16,9 @@ urlpatterns = [
   path('expense_list_view/', ExpenseListView.as_view(),
           name='expense_list'),
     path('receipt/', ReceiptProcessView.as_view(), 
-         name='process_receipt'),     
+         name='process_receipt'),   
+  path('update-expense/<int:pk>/update', views.ExpenseUpdateView.as_view(),
+        name='update_expense'),  
 ]
 
 #from this tutorial https://djangocentral.com/uploading-images-with-django/

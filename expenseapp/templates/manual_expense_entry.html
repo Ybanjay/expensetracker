@@ -10,7 +10,7 @@
     <div style="margin:auto;" class="card-body">
       <h3 class="card-title text-center text-success">Manual Expense Entry</h3>
     
-<form method="post" action="{% url 'manual_expense_form' %}">
+<form method="post" action="">
   {% csrf_token %}
   {{ form.errors }}
   {{ form.as_p }}

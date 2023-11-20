@@ -1,19 +1,13 @@
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
 from django.urls import reverse_lazy
 from .models import Expense
 from .forms import ExpenseForm
 from django.views import View
-import numpy as np
-import cv2
-import pytesseract
-import spacy
-from datetime import datetime
 from dateutil.parser import parse
-import re
 import os
 from django.conf import settings
 from dateutil.parser import ParserError
@@ -75,9 +69,6 @@ class ReceiptProcessView(View):
         if 'receipt_image' in request.FILES:
                 receipt_image = request.FILES['receipt_image']
 
-                 #Read Image Using OpenCV2
-                img = cv2.imdecode(np.frombuffer(receipt_image.read(), np.uint8), -1)
-
                 #Upload the receipt image to the media/receipts 
                 #directory with using instructions from
                 #https://docs.djangoproject.com/en/4.2/topics/http/file-uploads/
@@ -119,3 +110,15 @@ class ReceiptProcessView(View):
                             "amount": total_amount, "receipt_upload_path": receipt_relative_path }
                 return render(request, 'post_receipt_expense.html', context)
 
+
+#View for updating expense
+class ExpenseUpdateView(LoginRequiredMixin, UpdateView):
+    model = Expense
+    template_name = "manual_expense_entry.html"
+    form_class = ExpenseForm
+    success_url = reverse_lazy("expense_list")
+   
+   #Override form_valid method to return success update message
+    def form_valid(self, form):
+        messages.success(self.request, 'Expense updated successfully!!!.')
+        return super().form_valid(form)
