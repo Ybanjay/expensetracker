@@ -12,6 +12,8 @@ CATEGORIES_CHOICES = (
     ("refund", "Refund"), 
     ("schoollunch", "School Lunch"),
     ("giftanddonations", "Gifts and Donations" ),
+    ("clothingandshoes", "Clothing and Shoes" ),
+    ("mealsandentertainment", "Meals and Entertainment" ),
 
 ) 
 class ExpenseForm(forms.ModelForm):

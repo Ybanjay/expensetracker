@@ -18,7 +18,7 @@ import json
 from django.contrib import messages
 from django.db.models import Sum
 
-# Create your views here.
+# this is where my views are created.
 # Display Home Page
 def Welcome(request):
     return render(request, "welcome.html")
@@ -31,7 +31,7 @@ class AppView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         context['expenses'] = Expense.objects.filter(user=self.request.user)
 
-          #get all the expense categories from and a summation of all their amounts of expenses
+          #get summation of all expenses
         context['category_breakdown'] = Expense.objects.filter(user=self.request.user).values('category')\
                             .annotate(total=Sum('amount'))
         return context
@@ -82,7 +82,7 @@ class ReceiptProcessView(View):
                 receipt_image = request.FILES['receipt_image']
 
                 #Upload the receipt image to the media/receipts 
-                #directory with using instructions from
+                #directory using instructions from
                 #https://docs.djangoproject.com/en/4.2/topics/http/file-uploads/
 
                 receipt_upload_path = os.path.join(settings.MEDIA_ROOT, 'receipts', receipt_image.name)
