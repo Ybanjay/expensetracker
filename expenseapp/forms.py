@@ -6,7 +6,7 @@ from .models import Expense
 #https://www.geeksforgeeks.org/multiplechoicefield-django-forms/
 
 CATEGORIES_CHOICES = ( 
-    ("groceries", "Groceries"), 
+    ("foodandgroceries", "Food and Groceries"), 
     ("rent", "Rent"), 
     ("utility", "Utility"),  
     ("refund", "Refund"), 
@@ -14,6 +14,7 @@ CATEGORIES_CHOICES = (
     ("giftanddonations", "Gifts and Donations" ),
     ("clothingandshoes", "Clothing and Shoes" ),
     ("mealsandentertainment", "Meals and Entertainment" ),
+    
 
 ) 
 class ExpenseForm(forms.ModelForm):
