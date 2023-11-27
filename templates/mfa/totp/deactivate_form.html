@@ -1,0 +1,25 @@
+{% extends "mfa/totp/base.html" %}
+{% load i18n %}
+{% block content %}
+<div><br><br></div>
+<div class="row">
+<div class="col-sm-12 col-md-12">
+
+ <div class="card bg-info" style="width:500px; margin:auto;">
+  <div class="card-body">
+    <h3 class="card-title text-center text-success">{% trans "Deactivate Authenticator App" %}</h3>
+    
+    <p>
+        {% blocktranslate %}You are about to deactivate authenticator app based authentication. Are you sure?{% endblocktranslate %}
+    </p>
+    <form method="POST" action="{% url 'mfa_deactivate_totp' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">{% trans "Deactivate" %}</button>
+    </form>
+
+</div>
+</div>
+</div>
+</div>
+{% endblock content %}

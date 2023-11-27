@@ -18,7 +18,7 @@ CATEGORIES_CHOICES = (
 
 ) 
 class ExpenseForm(forms.ModelForm):
-    item = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
+    store_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
     amount = forms.DecimalField(max_digits=20, decimal_places=3, widget=forms.NumberInput(attrs={'class': 'form-control'} ))
     date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}))
     category = forms.ChoiceField(choices=CATEGORIES_CHOICES,
@@ -26,5 +26,5 @@ class ExpenseForm(forms.ModelForm):
 
     class Meta:
         model = Expense
-        fields = ['item', 'amount', 'date', 'category']
+        fields = ['store_name', 'amount', 'date', 'category']
 

@@ -1,0 +1,36 @@
+{% extends "mfa/recovery_codes/base.html" %}
+{% load i18n %}
+{% block content %}
+
+<div><br><br></div>
+<div class="row">
+<div class="col-sm-12 col-md-12">
+
+ <div class="card bg-info" style="width:500px; margin:auto;">
+  <div class="card-body">
+    <h3 class="card-title text-center text-success">{% translate "Recovery Codes" %}</h3>
+
+    
+    <p>
+        {% blocktranslate count unused_count=unused_codes|length %}There is {{ unused_count }} out of {{ total_count }} recovery codes available.{% plural %}There are {{ unused_count }} out of {{ total_count }} recovery codes available.{% endblocktranslate %}
+    </p>
+    {% if unused_codes %}
+        <textarea class="recovery-codes" rows="{{ unused_codes|length }}" readonly>{% for code in unused_codes %}{{ code }}
+{% endfor %}
+</textarea>
+    {% endif %}
+    <ul class="actions">
+        {% if unused_codes %}
+            <li>
+                <a href="{% url 'mfa_download_recovery_codes' %}">{% translate "Download codes" %}</a>
+            </li>
+        {% endif %}
+        <li>
+            <a href="{% url 'mfa_generate_recovery_codes' %}">{% translate "Generate new codes" %}</a>
+        </li>
+    </ul>
+</div>
+</div>
+</div>
+</div>
+{% endblock content %}

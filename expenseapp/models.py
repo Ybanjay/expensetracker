@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 
 class Expense(models.Model):
      user = models.ForeignKey(User, on_delete=models.CASCADE)
-     item = models.CharField(max_length=35)
+     store_name = models.CharField(max_length=35)
      amount = models.DecimalField(max_digits=20, decimal_places=3)
      date = models.DateField()
      category = models.CharField(max_length=35)

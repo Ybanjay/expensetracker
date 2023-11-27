@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block head_title %}
+    {% trans "Sign In" %}
+{% endblock head_title %}
+{% block content %}
+<div><br><br></div>
+<div class="row">
+<div class="col-sm-12 col-md-12">
+
+ <div class="card bg-info" style="width:500px; margin:auto;">
+  <div class="card-body">
+    <h3 class="card-title text-center text-success">{% trans "Two-Factor Authentication" %}</h3>
+  
+    <p>
+        {% blocktranslate %}Your account is protected by two-factor authentication. Please enter an authenticator code:{% endblocktranslate %}
+    </p>
+    <form class="authenticate"
+          method="POST"
+          action="{% url 'mfa_authenticate' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">{% trans "Sign In" %}</button>
+    </form>
+
+</div>
+</div>
+</div>
+</div>
+{% endblock content %}

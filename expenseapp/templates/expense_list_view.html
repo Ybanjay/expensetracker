@@ -9,7 +9,7 @@
     <table style="background: white;"  class="table table-stripped">
     
     <thead> 
-    <th> Name</th>
+    <th> Store name</th>
     <th> Amount</th>
     <th> Date</th>
     <th> Categories</th>
@@ -22,7 +22,7 @@
         {% if object_list %}
         {% for object in object_list %}
        <tr>
-       <td>{{ object.item|upper }}  </td>
+       <td>{{ object.store_name|upper }}  </td>
        <td> £ {{ object.amount }}  </td>
        <td>{{ object.date }} </td>
        <td> {{ object.category }}</td>

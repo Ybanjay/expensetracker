@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'expenseapp',
+    'allauth.mfa',
 ]
 
 MIDDLEWARE = [
@@ -79,6 +80,8 @@ WSGI_APPLICATION = 'expensetracker.wsgi.application'
 
 LOGIN_REDIRECT_URL ='/app/'
 LOGOUT_REDIRECT_URL =''
+
+MFA_ADAPTER = "allauth.mfa.adapter.DefaultMFAAdapter"
 
 
 # Database

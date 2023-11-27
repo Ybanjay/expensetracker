@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block content %}
+<div><br><br></div>
+<div class="row">
+<div class="col-sm-12 col-md-12">
+
+ <div class="card bg-info" style="width:500px; margin:auto;">
+  <div class="card-body">
+    <h3 class="card-title text-center text-success">{% trans "Activate Authenticator App" %}</h3>
+
+    {{ totp_svg|safe }}
+    <form method="POST" action="{% url 'mfa_activate_totp' %}">
+        {% csrf_token %}
+        <p>
+            <label>{% translate "Authenticator secret" %}:</label>
+            <input type="text"
+                   disabled="disabled"
+                   value="{{ form.secret }}"
+                   size="{{ form.secret|length }}">
+        </p>
+        {{ form.as_p }}
+        <button type="submit">{% trans "Activate" %}</button>
+    </form>
+
+</div>
+</div>
+</div>
+</div>
+{% endblock content %}
