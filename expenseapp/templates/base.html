@@ -15,7 +15,7 @@
   src="https://code.jquery.com/jquery-3.7.1.min.js"
   integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
   crossorigin="anonymous"></script>
-
+  <script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" 
             integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
 
@@ -60,7 +60,7 @@
                           <li><hr class="dropdown-divider"></li>
                           <li><a class="dropdown-item" href="{% url 'expense_list' %}"> Expense List</a></li>
                           <li><hr class="dropdown-divider"></li>
-                          <li><a class="dropdown-item" href="#">Link Your Account</a></li>
+                          <li><a class="dropdown-item" href="{% url 'plaid_link_token' %}">Link Bank Account</a></li>
                         </ul>
                       </li>
                       

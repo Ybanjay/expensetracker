@@ -1,0 +1,73 @@
+<!-- your_template.html -->
+{% extends 'base.html' %}
+
+{% block title %} Expense Tracker {% endblock %}
+
+{% block content %}
+
+
+    <div class="row">
+        <div style="width: 600px; margin:auto;"  class="col-md-8">
+            <div class="card bg-info" style="width:500px; margin:auto;">
+                <div class="card-body">
+            <div id="link-success" class="bg-success"> </div>
+        <p>
+            Click the button below to link your bank account to this platform - after which your
+            you will be able to track your expense transactions from your bank here
+        </p>
+
+        <button class="btn btn-primary btn-lg" onclick="openPlaidLink()">Link Your Bank Account</button>
+   
+
+    <div id="app">
+        
+        <div class="box" id="txnBox">
+            <button id="get-transaction-data">Get Transactions</button>
+            <div id="get-transactions-data"></div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+
+
+<script>
+    function openPlaidLink() {
+        const linkHandler = Plaid.create({
+            token: "{{ link_token }}",
+            onSuccess: (public_token, metadata) => {
+                // Send the public_token to your app server.
+                fetch('/exchange-public-token/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ public_token }),
+                })
+                .then(response => response.json())
+                .then(result => {
+                    // Handle the result after exchanging public_token
+                    console.log(result);
+                    //document.getElementById("link-success").innerHTML = result.linkinkg_status;
+                })
+                .catch(error => {
+                    console.error('Error exchanging public_token:', error);
+                });
+            },
+            onExit: (err, metadata) => {
+                // Optionally capture when your user exited the Link flow.
+                // Storing this information can be helpful for support.
+            },
+            onEvent: (eventName, metadata) => {
+                // Optionally capture Link flow events, streamed through
+                // this callback as your users connect an Item to Plaid.
+            },
+        });
+
+        // Open the Plaid Link
+        linkHandler.open();
+    }
+</script>
+
+{% endblock %}
