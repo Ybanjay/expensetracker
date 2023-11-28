@@ -95,10 +95,10 @@ class ReceiptProcessView(View):
 
 
                 # https://hub.veryfi.com/api/
-                client_id = 'vrfZ59w40O08opIU5szMZo3fGUPVjLZ59mMPVfx'
-                client_secret = 'aMVpxdo4Wd6DS97Bpcfp1ERkKgFoRdIlvKEOWRrjxIv23T5VaY3k2JWrZOTr3xXY4oAddejMUAojwBgI0Pd8DyzAFv9d4udoINLJwchXc9I4BmKGf7ZO90kEmzOXbk76'
-                username = 'softerboom'
-                api_key = 'c43a0fb9f07383c6db2357056afa2405'
+                client_id = 'vrfyNvRHPhs8MKiw7CgtuE4St54ZwUfsyPsWZi7'
+                client_secret = 'YWsct6gh0xa5U6DnIOwk4arpxW5B4RJytb3sgSLuFpE2yJ33AdRApuwBME0om1RoRJsRB7sAhjlAXpIzCkxMPOTCPO7R1SvNEuNTJDCfKfZ55afzxLyTpbTFNy5oDx3p'
+                username = 'edowaye22'
+                api_key = 'fe698e7e0adc44d62f60072854408ce8'
 
                 veryfi_client = Client(client_id, client_secret, username, api_key)
 
