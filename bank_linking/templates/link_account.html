@@ -19,13 +19,12 @@
         <button class="btn btn-primary btn-lg" onclick="openPlaidLink()">Link Your Bank Account</button>
    
 
-    <div id="app">
-        
+
         <div class="box" id="txnBox">
-            <button id="get-transaction-data">Get Transactions</button>
+            <a class="btn btn-primary btn-lg" href="{% url 'get_transactions' %}">Get Transactions</a>
             <div id="get-transactions-data"></div>
         </div>
-    </div>
+
 </div>
 </div>
 </div>
@@ -33,6 +32,8 @@
 
 
 <script>
+    //plaid link initialization code 
+    //from the plaid API Documentation
     function openPlaidLink() {
         const linkHandler = Plaid.create({
             token: "{{ link_token }}",
@@ -49,7 +50,7 @@
                 .then(result => {
                     // Handle the result after exchanging public_token
                     console.log(result);
-                    //document.getElementById("link-success").innerHTML = result.linkinkg_status;
+                    document.getElementById("link-success").innerHTML = result.linkinkg_status;
                 })
                 .catch(error => {
                     console.error('Error exchanging public_token:', error);

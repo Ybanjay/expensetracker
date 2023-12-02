@@ -17,7 +17,7 @@ from plaid.model.transactions_sync_request import TransactionsSyncRequest
 from plaid.model.products import Products
 from plaid.model.country_code import CountryCode
 from django.contrib.auth.decorators import login_required
-from expenseapp.models import Expense
+from expenseapp.models import Bank_Token, Expense
 from django.contrib import messages
 #from expenseapp.models import Bank_Token
 
@@ -100,10 +100,78 @@ def exchange_public_token(request):
     # associated with the currently signed-in user
     access_token = response['access_token']
     item_id = response['item_id']
-
-    return JsonResponse({"access Token": access_token})
-
-    #bank_token = Bank_Token(user=request.user, access_token=access_token, item_id=item_id)
     
-    #return JsonResponse({'linkinkg_status': "Your Account Has Been Linked Successfully"})
+    #save access token and item id in the database for 
+    # for subsequent usage
+    bank_token = Bank_Token(user=request.user, access_token=access_token, item_id=item_id)
+    
+    bank_token.save()
+    return JsonResponse({'linkinkg_status': "Your Account Has Been Linked Successfully"})
 
+#This get transaction function is based 
+#on the official plaid quickstart for integration
+# with python(https://plaid.com/docs/quickstart/)
+def get_transactions(request):
+    #global access_token
+    client = plaid_config()
+   # Set cursor to empty to receive all historical updates
+    cursor = ''
+    #access_token='access-sandbox-9e590854-fb70-4370-b0fb-2ed42633c94a',
+    # New transaction updates since "cursor"
+    my_access_token = Bank_Token.objects.filter(user=request.user)
+    for my_access in my_access_token:
+
+        access_token = my_access.access_token
+    added = []
+    modified = []
+    removed = [] 
+    has_more = True
+    batch_size = 5
+    try:
+        # Iterate through each page of new transaction updates for item
+        while has_more:
+            requesting = TransactionsSyncRequest(
+                access_token=access_token,
+                cursor=cursor,
+                count=batch_size 
+
+            )
+            response = client.transactions_sync(requesting).to_dict()
+            # Add this page of results
+            added.extend(response['added'])
+            modified.extend(response['modified'])
+            removed.extend(response['removed'])
+            has_more = response['has_more']
+            # Update cursor to the next cursor
+            cursor = response['next_cursor']
+           
+        # Return the 3 most recent transactions
+        latest_transactions = sorted(added, key=lambda t: t['date'])[-3:]
+      
+        for transaction in latest_transactions:
+            # expense transactions only.
+            #According to the plaid docs positive amounts 
+            #indicates outgoing transactions from the account which depicts expenses
+            if transaction.get('amount') > 0:
+                transaction_name = transaction.get('name')
+                transaction_amount = transaction.get('amount')
+                transaction_category = transaction.get('category')[0]
+                transaction_date = transaction.get('date')
+
+                exepnse_transactions = Expense(user=request.user, store_name=transaction_name, amount = transaction_amount, \
+                                               date = transaction_date, category = transaction_category)
+
+                exepnse_transactions.save()
+
+        messages.success(request, 'Expense Transactions  successfully Added!')
+
+        return redirect("expense_list")
+    
+        
+    except plaid.ApiException as e:
+
+        error_response = e
+
+        messages.error(request, error_response)  
+
+        return redirect("plaid_link_token")

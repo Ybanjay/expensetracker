@@ -1,13 +1,13 @@
 from typing import Any
 from django.db.models.query import QuerySet
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
 from django.urls import reverse_lazy
 from .models import Expense
-from .forms import ExpenseForm
+from .forms import ExpenseForm, ReceiptForm
 from django.views import View
 from dateutil.parser import parse
 import os
@@ -50,6 +50,28 @@ class ManualExpenseView(LoginRequiredMixin, CreateView):
         form.instance.receipt_image_path = self.request.POST.get('receipt_image_path')
         messages.success(self.request, 'Expense entry was successfully added!')
         return super().form_valid(form)
+
+
+#View for rendering and processing 
+# manual expense entry
+class ReceiptExpenseAddView(LoginRequiredMixin, View):
+
+   
+   def post(self, request):
+       
+       store_name = request.POST.get('store_name')
+       amount = request.POST.get('amount')
+       date = request.POST.get('date')
+       category = request.POST.get('category')
+
+       exepnse_transactions = Expense(user=request.user, store_name= store_name, amount = amount, \
+                                               date = date, category = category)
+
+       exepnse_transactions.save()
+
+       messages.success(request, 'Expense Transactions  successfully Added!')
+
+       return redirect("expense_list")
 
 
 #View For Extracting, Preprocessing 
@@ -119,7 +141,7 @@ class ReceiptProcessView(View):
                     stripped_date  = datetime.today()
                 
                 context = { "transaction_date": stripped_date, "store_name": vendor_name,
-                            "amount": total_amount, "receipt_upload_path": receipt_relative_path }
+                            "amount": total_amount, "receipt_upload_path": receipt_relative_path, "category": category }
                 return render(request, 'post_receipt_expense.html', context)
 
 

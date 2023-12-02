@@ -12,3 +12,10 @@ class Expense(models.Model):
      category = models.CharField(max_length=35)
      receipt_image_path = models.CharField(max_length=277, blank=True, null=True)
 
+
+#this is the model for storing 
+#plaid access_token and item_id
+class Bank_Token(models.Model):
+      user = models.ForeignKey(User, on_delete=models.CASCADE)
+      access_token = models.CharField(max_length=255)
+      item_id = models.CharField(max_length=255)

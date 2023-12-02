@@ -3,7 +3,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path
 from .views import (ManualExpenseView, AppView, ExpenseListView, ReceiptProcessView, 
-                    ExpenseUpdateView, ExpenseDeleteView)
+                    ExpenseUpdateView, ExpenseDeleteView, ReceiptExpenseAddView)
 from . import views
 
 
@@ -22,6 +22,8 @@ urlpatterns = [
         name='update_expense'),  
    path('delete-expense/<int:pk>/update', views.ExpenseDeleteView.as_view(), 
         name='delete_expense'),
+        path('receipt_expense/', ReceiptExpenseAddView.as_view(),
+          name='receipt_expense_form'),
 ]
 
 #from this tutorial https://djangocentral.com/uploading-images-with-django/
