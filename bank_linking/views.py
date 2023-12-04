@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from plaid.api import plaid_api
 import plaid
 import datetime
+from dotenv import load_dotenv
 import os
 import json
 from plaid.model.item_public_token_exchange_request import ItemPublicTokenExchangeRequest
@@ -22,12 +23,13 @@ from django.contrib import messages
 #from expenseapp.models import Bank_Token
 
 # Create your views here.
+
 # plaid client config
 def plaid_config():
+    load_dotenv()
+    client_id = os.getenv('PLAID_CLIENT_ID')
 
-    client_id = "6564ee36524852001cc0c409"
-
-    secret = "7c86d9ea5d2689bed8acdc36c94927"
+    secret = os.getenv('PLAID_SECRET')
     
     configuration = plaid.Configuration(
                     host=plaid.Environment.Sandbox,
@@ -41,6 +43,7 @@ def plaid_config():
     client = plaid_api.PlaidApi(api_client)
     
     return client
+
 
 @csrf_exempt
 @login_required
