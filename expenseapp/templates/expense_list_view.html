@@ -26,7 +26,14 @@
        <td> £ {{ object.amount }}  </td>
        <td>{{ object.date }} </td>
        <td> {{ object.category }}</td>
-       <td><a href="/media/{{ object.receipt_image_path }}">View Receipt</a>
+       <td>
+        {% if object.receipt_image_path is None %}
+        -----
+        {% else %}
+        <a href="/media/{{ object.receipt_image_path }}">View Receipt</a>
+
+        {% endif %}
+
        </td>
        <td><a href="{% url 'update_expense' object.id %}"> Edit | <a href="{% url 'delete_expense' object.id %}"> Delete</a></a></td>
        

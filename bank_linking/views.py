@@ -84,6 +84,7 @@ def plaid_link_token(request):
 
     return render(request, 'link_account.html', {'link_token': link_token})
 
+
 @csrf_exempt
 @login_required
 def exchange_public_token(request):
@@ -92,7 +93,6 @@ def exchange_public_token(request):
     
     request_data = json.loads(request.body)
     public_token = request_data.get('public_token', '')
-    #public_token= "public-sandbox-413e5a85-4f50-4200-b288-d6d9bf79c667"
     
     requesting = ItemPublicTokenExchangeRequest(
         public_token=public_token
@@ -120,8 +120,7 @@ def get_transactions(request):
     client = plaid_config()
    # Set cursor to empty to receive all historical updates
     cursor = ''
-    #access_token='access-sandbox-9e590854-fb70-4370-b0fb-2ed42633c94a',
-    # New transaction updates since "cursor"
+       # New transaction updates since "cursor"
     my_access_token = Bank_Token.objects.filter(user=request.user)
     for my_access in my_access_token:
 
@@ -148,9 +147,18 @@ def get_transactions(request):
             has_more = response['has_more']
             # Update cursor to the next cursor
             cursor = response['next_cursor']
-           
-        # Return the 3 most recent transactions
-        latest_transactions = sorted(added, key=lambda t: t['date'])[-3:]
+            #pretty_print_response(response)
+
+        """
+    except plaid.ApiException as e:
+
+        error_response = e
+
+        messages.error(request, error_response) 
+     """
+        # Return the 5 most recent transactions
+        
+        latest_transactions = sorted(added, key=lambda t: t['date'])[-5:]
       
         for transaction in latest_transactions:
             # expense transactions only.
@@ -179,3 +187,6 @@ def get_transactions(request):
         messages.error(request, error_response)  
 
         return redirect("plaid_link_token")
+    
+def pretty_print_response(response):
+  print(json.dumps(response, indent=2, sort_keys=True, default=str))

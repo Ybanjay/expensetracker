@@ -15,6 +15,7 @@ CATEGORIES_CHOICES = (
     ("giftanddonations", "Gifts and Donations" ),
     ("clothingandshoes", "Clothing and Shoes" ),
     ("mealsandentertainment", "Meals and Entertainment" ),
+    ("travel", "Travel" ),
     
 
 ) 
@@ -32,12 +33,5 @@ class ExpenseForm(forms.ModelForm):
 
 
 
-class ReceiptForm(forms.ModelForm):
-    store_name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
-    amount = forms.DecimalField(max_digits=20, decimal_places=3, widget=forms.NumberInput(attrs={'class': 'form-control'} ))
-    date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}))
-    category = forms.ChoiceField(widget=forms.Select(attrs={'class': 'form-select'}), required=False)
 
-    class Meta:
-        model = Expense
-        fields = ['store_name', 'amount', 'date', 'category']
+

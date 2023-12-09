@@ -7,7 +7,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
 from django.urls import reverse_lazy
 from .models import Expense
-from .forms import ExpenseForm, ReceiptForm
+from .forms import ExpenseForm
 from django.views import View
 from dateutil.parser import parse
 import os
@@ -81,9 +81,10 @@ class ReceiptExpenseAddView(LoginRequiredMixin, View):
        amount = request.POST.get('amount')
        date = request.POST.get('date')
        category = request.POST.get('category')
+       receipt_image = request.POST.get('receipt_image_path')
 
        exepnse_transactions = Expense(user=request.user, store_name= store_name, amount = amount, \
-                                               date = date, category = category)
+                                               date = date, category = category, receipt_image_path = receipt_image)
 
        exepnse_transactions.save()
 
