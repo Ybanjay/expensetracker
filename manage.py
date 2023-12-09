@@ -3,7 +3,7 @@
 import os
 import sys
 
-
+#https://docs.djangoproject.com/en/4.2/intro/tutorial01/.
 def main():
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'expensetracker.settings')

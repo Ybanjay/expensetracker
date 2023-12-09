@@ -19,7 +19,8 @@ from django.contrib import messages
 from django.db.models import Sum
 from dotenv import load_dotenv
 
-# this is where my views are created.
+#https://docs.djangoproject.com/en/4.2/intro/tutorial01/.
+# this is where my views are created
 # Display Home Page
 def Welcome(request):
     return render(request, "welcome.html")
@@ -30,12 +31,28 @@ class AppView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['expenses'] = Expense.objects.filter(user=self.request.user)
 
-          #get summation of all expenses
-        context['category_breakdown'] = Expense.objects.filter(user=self.request.user).values('category')\
+        start_date = self.request.GET.get('start_date')
+        end_date = self.request.GET.get('end_date')
+
+        if start_date and end_date:
+            # Filter data based on the selected date range
+            expenses= Expense.objects.filter(date__range=[start_date, end_date], user=self.request.user)
+            category_breakdown = Expense.objects.filter(date__range=[start_date, end_date], user=self.request.user).values('category')\
                             .annotate(total=Sum('amount'))
+        else:
+            # Default to all data if no date range is selected
+            expenses= Expense.objects.filter(user=self.request.user)
+            category_breakdown = Expense.objects.filter(date__range=[start_date, end_date], user=self.request.user).values('category')\
+                            .annotate(total=Sum('amount'))
+
+        #pass the user expenses to context
+        context['expenses'] = expenses
+         
+          #get all the expense categories from and a summation of all their amounts of expenses
+        context['category_breakdown'] = category_breakdown
         return context
+    
     
 
 

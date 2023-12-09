@@ -4,6 +4,18 @@
 
 {% block content %}
 <div style="background: lavender;" class="row">
+    
+    <h4 class="text-success">Enter Chart Date Range Below</h4>
+    <form method="get" action="{% url 'user_dashboard' %}">
+        <label for="start_date">Start Date:</label>
+        <input type="date" id="start_date" name="start_date" required>
+    
+        <label for="end_date">End Date:</label>
+        <input type="date" id="end_date" name="end_date" required>
+    
+        <button class="btn btn-info" type="submit">Get Chart</button>
+    </form>
+
     <h1>Week expense Chart</h1>
     <div class="col-md-6">
         <canvas id="myChartBar" width="500" height="600"></canvas>

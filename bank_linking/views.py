@@ -24,6 +24,7 @@ from django.contrib import messages
 
 # Create your views here.
 
+#https://dashboard.plaid.com/developers/sandbox.
 # plaid client config
 def plaid_config():
     load_dotenv()
