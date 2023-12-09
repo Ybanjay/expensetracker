@@ -43,7 +43,7 @@ class AppView(LoginRequiredMixin, TemplateView):
         else:
             # Default to all data if no date range is selected
             expenses= Expense.objects.filter(user=self.request.user)
-            category_breakdown = Expense.objects.filter(date__range=[start_date, end_date], user=self.request.user).values('category')\
+            category_breakdown = Expense.objects.filter(user=self.request.user).values('category')\
                             .annotate(total=Sum('amount'))
 
         #pass the user expenses to context
