@@ -36,7 +36,7 @@ class AppView(LoginRequiredMixin, TemplateView):
         end_date = self.request.GET.get('end_date')
 
         if start_date and end_date:
-            # Filter data based on the selected date range
+            # Filter data based on the selected date range for bar and pie chart
             expenses= Expense.objects.filter(date__range=[start_date, end_date], user=self.request.user)
             category_breakdown = Expense.objects.filter(date__range=[start_date, end_date], user=self.request.user).values('category')\
                             .annotate(total=Sum('amount'))
@@ -56,7 +56,7 @@ class AppView(LoginRequiredMixin, TemplateView):
     
 
 
-#View for rendering and processing 
+#View for rendering and processing my dropdowns
 # manual expense entry
 class ManualExpenseView(LoginRequiredMixin, CreateView):
     template_name = "manual_expense_entry.html"
@@ -69,11 +69,9 @@ class ManualExpenseView(LoginRequiredMixin, CreateView):
         messages.success(self.request, 'Expense entry was successfully added!')
         return super().form_valid(form)
 
-
 #View for rendering and processing 
 # manual expense entry
 class ReceiptExpenseAddView(LoginRequiredMixin, View):
-
    
    def post(self, request):
        
@@ -108,7 +106,6 @@ class ExpenseListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         expense_query_set = super().get_queryset()
         return expense_query_set.filter(user = self.request.user)
-
     
 
 class ReceiptProcessView(View):
@@ -146,7 +143,9 @@ class ReceiptProcessView(View):
 
                 veryfi_client = Client(client_id, client_secret, username, api_key)
 
-                categories = ['Grocery', 'Utilities', 'Travel']
+                categories = ['Grocery', 'Utility', 'Travel', 'Clothing', 'Rent', 'Food', 'Refund', 'SchoolLunch']
+
+                #vendor_name = ['Asda', 'Home Bargains', 'Co-op', 'Britishheart', 'CancerResearch', 'Aldi', 'Lidl', 'StellasVoice']
                   
                 # submits document for processing (takes 3-5 seconds to get response)
                 document_json = veryfi_client.process_document(receipt_upload_path, categories=categories)

@@ -149,13 +149,8 @@ def get_transactions(request):
             cursor = response['next_cursor']
             #pretty_print_response(response)
 
-        """
-    except plaid.ApiException as e:
 
-        error_response = e
-
-        messages.error(request, error_response) 
-     """
+    
         # Return the 5 most recent transactions
         
         latest_transactions = sorted(added, key=lambda t: t['date'])[-5:]
@@ -187,6 +182,7 @@ def get_transactions(request):
         messages.error(request, error_response)  
 
         return redirect("plaid_link_token")
+    
     
 def pretty_print_response(response):
   print(json.dumps(response, indent=2, sort_keys=True, default=str))
